@@ -1,0 +1,122 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="DTV/Guidelines/Navigation" />
+
+# Navigation
+
+Pages in this system are compositions of a fixed 1280×720 stack. Before designing a screen, it must answer:
+
+- Which **level** is this?
+- Is the **menu** configured, a hint trail only, hidden, or off?
+- Which **rail** may open (left or right)?
+- Where does **focus** land, and how does the user go **back**?
+
+Overlay variants pair contrast to the chrome footprint. Name the overlay from that footprint; do not invent a new one per page.
+
+## Cartesian model
+
+Navigation is a Cartesian plane on a D-pad. Move on **one axis at a time**. **X** moves across options at the current level. **Y** changes depth: up goes deeper, Back goes shallower. There are no diagonal shortcuts.
+
+```
+Clean transmission
+        │  bug / open interface
+        ▼
+Level 1 Home
+  X: menu slots
+  Hint trail sits above the menu for the focused slot
+        │  up
+        ▼
+Level 2 focused trail
+  Menu hidden; only that trail
+  X: interactivities in the trail
+  Back: Level 1
+        │  enter the focused interactivity
+        ▼
+Level 3 single interactivity
+  Back / close: Level 2
+  (Level 1 if it was a full page, e.g. VOD)
+```
+
+## Three levels
+
+| Level | What you see | X | Y / Back |
+| --- | --- | --- | --- |
+| **1 Home** | Full menu. The trail for the **focused slot** sits **above** the menu as a hint of what is inside. | Horizontal between menu options | **Up** enters Level 2 for that slot. The bug returns to a clean transmission. |
+| **2 Trilho focado** | Menu **hidden**. Only the content trail. | Horizontal across interactivities | **Back** returns to Level 1. **Enter / OK** on the focused card opens Level 3. |
+| **3 Interatividade única** | Only that interactivity: a tall card still on a trail (e.g. stats), or a full new page (VOD). | Within that surface, if it has its own rows | Enter only from Level 2. Close / Back leaves Level 3. |
+
+### Level 1 hint trails
+
+The trail on Home is a **preview**, not a second destination. It updates with the focused menu slot:
+
+| Focused slot | Hint trail |
+| --- | --- |
+| Profile | Account cards (*Configurações da conta*, *Sair da conta*) |
+| EPG | Linear schedule with time ranges; live item uses the AO VIVO badge |
+| Discover | Widgets (weather, vote, promo) |
+| Live / contextual | Interactivities for the current show |
+
+The Globo bug is in the Left/Right dock path but does not spawn a trail. It is the home / exit control.
+
+## Rails
+
+Do not flip these sides.
+
+| Rail | Contents |
+| --- | --- |
+| **Left** | Profile, EPG, Discover |
+| **Right** | Now-playing + Globo bug |
+
+Secondary trails inherit the same side: profile, EPG, and Discover open from the left; live interactivities open from the right. Do not mix sides on the same page type.
+
+## Layer stack
+
+Always **1280×720**, inset **40px**.
+
+1. Video
+2. Overlay / shadows (contrast only — not navigation)
+3. Chrome (menu on Level 1; hidden on Level 2; off on Level 3)
+4. Hint trail or focused trail
+5. Level 3 surface, when present
+
+On Level 3, the persistent control is **Close** (top-right). The menu is off.
+
+## Do / don’t
+
+**Do**
+
+- Keep one focus at a time.
+- Show the hint trail for the focused Level 1 slot.
+- Enter Level 2 with **Up** from that slot.
+- Enter Level 3 only with **Enter / OK** on the focused Level 2 card.
+- Return with **Back** (Level 2 → 1, Level 3 → 2, or Level 3 → 1 for a full page).
+
+**Don’t**
+
+- Skip Level 2 to open an interactivity from Home.
+- Keep the main menu visible on Level 2.
+- Draw a second menu or restyle chrome per page.
+- Treat VOD as a fourth level — it is Level 3 as a full page.
+- Spawn a hint trail from the bug.
+- Jump from a left rail to a right rail without passing through the bar.
+- Put primary actions in the top-right except the bug (Level 1) or Close (Level 3).
+
+## Templates
+
+Clone a 1280×720 template to start a page; do not invent new chrome. They use Overlay, Menu, ContentTrail, and RoundButton. Level 3 content surfaces (tall card, VOD page) stay labeled slots until those components exist.
+
+| Level | Template |
+| --- | --- |
+| 1 Home | [Templates/Home](?path=/story/templates-home--default) |
+| 2 focused trail | [Templates/FocusedRail — Left](?path=/story/templates-focusedrail--left) · [Right](?path=/story/templates-focusedrail--right) |
+| 3 single interactivity | [Templates/SingleInteractivity — Tall card](?path=/story/templates-singleinteractivity--tall-card) · [Full page](?path=/story/templates-singleinteractivity--full-page) |
+
+Fill these slots with page-specific content. Keep Overlay, Menu, and trail regions as they are.
+
+Scratch prototypes live in [Playground](?path=/docs/playground-overview--docs). Duplicate [Starter](?path=/story/playground-starter--default); promote to Pages when the checklist passes.
+
+## Pages
+
+| Page | Level | Checklist |
+| --- | --- | --- |
+| [Home](?path=/story/pages-home--default) | 1 | Menu configured. Hint trail for the focused slot (none on the bug). Left rail: profile, EPG, discover. Right rail: live + bug. Overlay follows the chrome footprint. Back from the bug is a clean transmission. |

@@ -1,0 +1,23 @@
+/*
+ * DTV Design System — embedded preview styling.
+ * DTV token variables are imported globally (namespaced --color-*, --space-*,
+ * --font-*, --radius-*, --shadow-*, --gradient-*, --opacity-*), and every DTV
+ * story is wrapped in a `.dtv-scope` element that re-creates the DTV app body
+ * baseline. Dark mode is driven by `data-theme="dark"` on that same wrapper.
+ */
+.dtv-scope {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-default);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+.dtv-scope,
+.dtv-scope *,
+.dtv-scope *::before,
+.dtv-scope *::after {
+  box-sizing: border-box;
+}
