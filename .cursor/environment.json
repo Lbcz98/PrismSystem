@@ -1,0 +1,20 @@
+{
+  "name": "Prism System",
+  "install": "npm install --legacy-peer-deps && npm run build && npm run build:output && npx playwright install chromium",
+  "terminals": [
+    {
+      "name": "controller",
+      "command": "npm run controller",
+      "description": "Prism Controller: zero-dependency Node server for theming the design system, served at http://localhost:4400"
+    },
+    {
+      "name": "storybook",
+      "command": "npm run storybook",
+      "description": "Storybook component explorer for the @ds/* packages, served at http://localhost:6006"
+    }
+  ],
+  "ports": [
+    { "name": "controller", "port": 4400 },
+    { "name": "storybook", "port": 6006 }
+  ]
+}
