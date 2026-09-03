@@ -1,0 +1,22 @@
+.frame {
+  position: relative;
+  width: 1280px;
+  height: 720px;
+  overflow: hidden;
+  background: #0c0c0f;
+  color: #fff;
+  font-family: var(--font-family-sans);
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  background-color: #2a2a30;
+  background-size: cover;
+  background-position: center;
+}
+
+.stage {
+  position: absolute;
+  inset: 0;
+}

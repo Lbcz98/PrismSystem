@@ -2,6 +2,11 @@ import React from 'react';
 import { create } from 'storybook/theming';
 import { DocsContainer } from '@storybook/addon-docs/blocks';
 
+// DTV Design System (imported): global token variables + embedded preview base.
+import '@dtv/tokens/css';
+import '@dtv/tokens/css/dark';
+import './dtv-preview.css';
+
 const docsLightTheme = create({
   base: 'light',
   fontBase: '"Inter", system-ui, -apple-system, sans-serif',
@@ -16,8 +21,37 @@ const docsLightTheme = create({
 
 /** @type { import('@storybook/nextjs-vite').Preview } */
 const preview = {
+  globalTypes: {
+    dtvTheme: {
+      description: 'DTV theme (applies to DTV/* stories)',
+      defaultValue: 'dark',
+      toolbar: {
+        title: 'DTV theme',
+        icon: 'circlehollow',
+        items: [
+          { value: 'light', title: 'DTV Light' },
+          { value: 'dark', title: 'DTV Dark' }
+        ],
+        dynamicTitle: true
+      }
+    }
+  },
+
   decorators: [
-    (Story) => {
+    (Story, context) => {
+      const isDtv = (context.title || '').startsWith('DTV');
+
+      if (isDtv) {
+        // DTV stories render in an isolated, themeable scope so DTV's
+        // primitive token variables never leak into Prism's own components.
+        const theme = context.globals.dtvTheme ?? 'dark';
+        return React.createElement(
+          'div',
+          { className: 'dtv-scope', 'data-theme': theme },
+          React.createElement(Story)
+        );
+      }
+
       if (typeof document !== 'undefined') {
         document.documentElement.setAttribute('data-color-mode', 'light');
         document.documentElement.setAttribute('data-theme', 'core');
@@ -93,6 +127,17 @@ const preview = {
             '*'
           ],
 
+          // L1 — section (imported DTV Design System)
+          'DTV',
+          [
+            'Playground',
+            'Guidelines',
+            'Foundations',
+            'Components',
+            'Templates',
+            'Pages',
+            '*'
+          ],
 
           // Keep any unmatched stories at the end
           '*'
